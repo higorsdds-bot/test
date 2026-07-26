@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado de Reconhecimento</title>
+
+    <!-- Importação de fontes do Google Fonts (Playfair Display para títulos e Lora para texto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cor-fundo-profundo: #2d0202; /* Vinho escuro */
+            --cor-borda-ouro: #c4a77d;   /* Dourado/Bronze */
+            --cor-texto-claro: #f5eeda;  /* Creme suave */
+            --cor-texto-subtil: #bfa47f;  /* Dourado envelhecido para detalhes */
+            --fonte-titulos: 'Playfair Display', serif;
+            --fonte-texto: 'Lora', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--cor-fundo-profundo);
+            background-image: 
+                radial-gradient(circle at center, #5e0a0a 0%, var(--cor-fundo-profundo) 70%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%3C3C3C3' fill-opacity='0.05' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #abrir {
+            padding: 20px 45px;
+            font-size: 22px;
+            font-family: var(--fonte-titulos);
+            border: 2px solid var(--cor-borda-ouro);
+            border-radius: 50px;
+            background: linear-gradient(45deg, #1a0101, #3a0303);
+            color: var(--cor-borda-ouro);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        #abrir:hover {
+            background: var(--cor-borda-ouro);
+            color: var(--cor-fundo-profundo);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(196, 167, 125, 0.4);
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.5s ease-out;
+            padding: 15px;
+            z-index: 1000;
+            overflow-y: auto; /* Permite rolar a tela inteira do modal se necessário */
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .box {
+            width: 100%;
+            max-width: 700px;
+            background: #1a0101;
+            border: 3px solid var(--cor-borda-ouro);
+            border-radius: 15px;
+            padding: 50px 40px;
+            text-align: center;
+            color: var(--cor-texto-claro);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            animation: slideInUp 0.6s ease-out;
+            position: relative;
+            margin: auto; /* Garante centralização perfeita e scroll livre */
+            max-height: 90vh; /* Limita a altura para não sumir da tela */
+            overflow-y: auto; /* Habilita rolagem interna caso a tela do celular seja pequena */
+            
+            background-image: 
+                radial-gradient(circle at top left, var(--cor-borda-ouro) 1px, transparent 1px),
+                radial-gradient(circle at top right, var(--cor-borda-ouro) 1px, transparent 1px),
+                radial-gradient(circle at bottom left, var(--cor-borda-ouro) 1px, transparent 1px),
+                radial-gradient(circle at bottom right, var(--cor-borda-ouro) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: top left, top right, bottom left, bottom right;
+            background-repeat: no-repeat;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px var(--cor-borda-ouro));
+        }
+
+        h1 {
+            font-family: var(--fonte-titulos);
+            color: var(--cor-borda-ouro);
+            font-size: 38px;
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-family: var(--fonte-texto);
+            color: var(--cor-texto-subtil);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .linha {
+            width: 130px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--cor-borda-ouro), transparent);
+            margin: 25px auto 30px;
+        }
+
+        p {
+            font-family: var(--fonte-texto);
+            color: var(--cor-texto-claro);
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 18px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .final {
+            margin-top: 30px;
+            font-size: 26px;
+            color: var(--cor-borda-ouro);
+            font-weight: 600;
+            font-family: var(--fonte-texto);
+            font-style: italic;
+            padding: 8px 15px;
+            border-top: 1px solid #444;
+            border-bottom: 1px solid #444;
+            display: inline-block;
+        }
+
+        .assinatura {
+            margin-top: 35px;
+            color: #888;
+            font-size: 14px;
+            font-family: var(--fonte-texto);
+            font-style: italic;
+        }
+
+        .fechar {
+            margin-top: 30px;
+            padding: 12px 30px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: transparent;
+            color: #999;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: var(--fonte-texto);
+        }
+
+        .fechar:hover {
+            background: #444;
+            color: white;
+            border-color: #777;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 600px) {
+            .box { 
+                padding: 30px 20px; 
+                max-height: 85vh;
+            }
+            h1 { font-size: 24px; letter-spacing: 2px; }
+            h2 { font-size: 16px; }
+            p { font-size: 15px; line-height: 1.6; }
+            .final { font-size: 20px; }
+            #abrir { font-size: 18px; padding: 15px 30px; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <button id="abrir">
+        Abrir seu Certificado
+    </button>
+
+    <div class="modal" id="modal">
+
+        <div class="box">
+
+            <div class="icon">📜</div>
+
+            <h1>CERTIFICADO DE RECONHECIMENTO</h1>
+
+            <h2>Emitido com carinho, por ser quem você é.</h2>
+
+            <div class="linha"></div>
+
+            <p>
+                Existem almas raras que possuem o dom natural de iluminar os dias de quem está por perto, apenas existindo e sendo autênticas.
+            </p>
+
+            <p>
+                Você é uma dessas pessoas. Sua presença transforma ambientes e sua essência deixa marcas doces e inesquecíveis na vida de todos que têm a sorte de lhe conhecer.
+            </p>
+
+            <p>
+                Este documento não tem valor burocrático, mas é o registro oficial da minha admiração e gratidão pela sua existência.
+            </p>
+
+            <p class="final">
+                Você é uma pessoa incrível.
+            </p>
+
+            <div class="assinatura">
+                Com carinho e reconhecimento.
+            </div>
+
+            <button class="fechar" onclick="fecharModal()">
+                Guardar
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+        const modal = document.getElementById("modal");
+        const botaoAbrir = document.getElementById("abrir");
+
+        botaoAbrir.addEventListener("click", function () {
+            modal.classList.add("show");
+        });
+
+        function fecharModal() {
+            modal.classList.remove("show");
+        }
+
+        modal.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                fecharModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.classList.contains('show')) {
+                fecharModal();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
