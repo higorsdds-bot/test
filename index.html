@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
+    <!-- Biblioteca para gerar a imagem do certificado -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
         :root {
             --cor-fundo-profundo: #2d0202; /* Vinho escuro */
@@ -179,23 +182,52 @@
             font-style: italic;
         }
 
-        .fechar {
+        .botoes {
             margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .fechar, .baixar {
             padding: 12px 30px;
-            border: 1px solid #555;
             border-radius: 4px;
-            background: transparent;
-            color: #999;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
             font-family: var(--fonte-texto);
         }
 
+        .fechar {
+            border: 1px solid #555;
+            background: transparent;
+            color: #999;
+        }
+
         .fechar:hover {
             background: #444;
             color: white;
             border-color: #777;
+        }
+
+        .baixar {
+            border: 1px solid var(--cor-borda-ouro);
+            background: var(--cor-borda-ouro);
+            color: var(--cor-fundo-profundo);
+            font-weight: 600;
+        }
+
+        .baixar:hover {
+            background: #d9bd8f;
+            border-color: #d9bd8f;
+            transform: translateY(-2px);
+        }
+
+        .baixar:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
         }
 
         /* Responsividade para telas menores */
@@ -209,6 +241,8 @@
             p { font-size: 15px; line-height: 1.6; }
             .final { font-size: 20px; }
             #abrir { font-size: 18px; padding: 15px 30px; }
+            .botoes { flex-direction: column; }
+            .fechar, .baixar { width: 100%; }
         }
     </style>
 
@@ -222,7 +256,7 @@
 
     <div class="modal" id="modal">
 
-        <div class="box">
+        <div class="box" id="certificado">
 
             <div class="icon">📜</div>
 
@@ -252,9 +286,14 @@
                 Com carinho e reconhecimento.
             </div>
 
-            <button class="fechar" onclick="fecharModal()">
-                Guardar
-            </button>
+            <div class="botoes">
+                <button class="baixar" id="baixar" onclick="baixarCertificado()">
+                    ⬇ Baixar Certificado
+                </button>
+                <button class="fechar" onclick="fecharModal()">
+                    Guardar
+                </button>
+            </div>
 
         </div>
 
@@ -283,6 +322,40 @@
                 fecharModal();
             }
         });
+
+        function baixarCertificado() {
+            const certificado = document.getElementById("certificado");
+            const botaoBaixar = document.getElementById("baixar");
+            const textoOriginal = botaoBaixar.innerHTML;
+
+            botaoBaixar.disabled = true;
+            botaoBaixar.innerHTML = "Gerando imagem...";
+
+            // Esconde os botões temporariamente para não aparecerem na imagem
+            const botoesDiv = certificado.querySelector(".botoes");
+            botoesDiv.style.visibility = "hidden";
+
+            html2canvas(certificado, {
+                backgroundColor: "#1a0101",
+                scale: 3, // alta resolução
+                useCORS: true
+            }).then(function(canvas) {
+                const link = document.createElement("a");
+                link.download = "certificado-de-reconhecimento.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+
+                botoesDiv.style.visibility = "visible";
+                botaoBaixar.disabled = false;
+                botaoBaixar.innerHTML = textoOriginal;
+            }).catch(function(erro) {
+                console.error("Erro ao gerar imagem:", erro);
+                botoesDiv.style.visibility = "visible";
+                botaoBaixar.disabled = false;
+                botaoBaixar.innerHTML = textoOriginal;
+                alert("Não foi possível gerar a imagem. Tente novamente.");
+            });
+        }
     </script>
 
 </body>
